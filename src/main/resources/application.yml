@@ -1,0 +1,16 @@
+server:
+  port: 7445
+spring:
+  security:
+    user:
+      name: admin
+      password: 123456
+  datasource:
+    url: jdbc:mysql://192.168.73.141:3306/test?characterEncoding=utf8
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
