@@ -1,11 +1,11 @@
 # System-Informcation-Collector
-Collect operating system information by Java.
+Collect operating system information by Java.<br/>
+基于Spring Boot开发的服务器监控系统。部署到服务器后可以实时查看服务器的各类信息变化。<br/>
 
-Centos
-libsigar-amd64-linux.so 拷贝到/usr/lib64/下面
-授权
-sudo chmod 744 /usr/lib64/libsigar-amd64-linux.so
-chmod a+x /usr/lib64/libsigar-amd64-linux.so
+Centos<br/>
+libsigar-amd64-linux.so 拷贝到/usr/lib64/下面<br/>
+授权<br/>
+chmod a+x /usr/lib64/libsigar-amd64-linux.so<br/>
 
 
 <table class="confluenceTable" style="border:1px solid #C0C0C0;border-collapse:collapse;clear:left;font-size:13px;color:rgb(0,0,0);line-height:17px;font-family:Arial, Helvetica, FreeSans, sans-serif;"><tbody><tr style="font-size:10pt;line-height:13pt;"><th class="confluenceTh" style="border:1px solid rgb(221,221,221);border-collapse:collapse;min-width:.6em;font-size:10pt;vertical-align:top;line-height:13pt;">
