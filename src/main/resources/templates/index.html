@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        td{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<h5>系统信息(Sigar版)</h5>
+<div id="system">
+    <ul id="system-info"> </ul>
+</div>
+<h5>系统信息(Java版)</h5>
+<div>
+    <ul id="system-info-java"> </ul>
+</div>
+<h5>系统用户</h5>
+<div id="user">
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Host</th>
+            <th>Device</th>
+            <th>Time</th>
+        </tr>
+        <tbody id="user-info"></tbody>
+    </table>
+</div>
+
+<h5>CPU信息</h5>
+<div id="cpu">
+    <table>
+        <tr>
+            <th>厂商</th>
+            <th>类别</th>
+            <th>频率</th>
+            <th>缓冲存储器数量</th>
+            <th>用户使用率</th>
+            <th>系统使用率</th>
+            <th>当前等待率</th>
+            <th>当前错误率</th>
+            <th>当前空闲率</th>
+            <th>总的使用率</th>
+        </tr>
+        <tbody id="cpu-info"></tbody>
+    </table>
+</div>
+<h5>内存信息</h5>
+<div>
+    <table>
+        <tr>
+            <th>内存总量</th>
+            <th>当前内存使用量</th>
+            <th>当前内存剩余量</th>
+            <th>交换区总量</th>
+            <th>当前交换区使用量</th>
+            <th>当前交换区剩余量</th>
+        </tr>
+        <tbody id="memory-info"></tbody>
+    </table>
+</div>
+<h5>硬盘信息</h5>
+<div>
+    <table>
+        <tr>
+            <th>DevName</th>
+            <th>DirName</th>
+            <th>Flags</th>
+            <th>SysTypeName</th>
+            <th>TypeName</th>
+            <th>Type</th>
+            <th>Total</th>
+            <th>Free</th>
+            <th>Avail</th>
+            <th>Used</th>
+            <th>Percent</th>
+            <th>DiskReads</th>
+            <th>DiskWrites</th>
+        </tr>
+        <tbody id="file-system-info"></tbody>
+    </table>
+</div>
+<h5>网络信息</h5>
+<div>
+    <table>
+        <tr>
+            <th>name</th>
+            <th>address</th>
+            <th>netmask</th>
+            <th>接收的总包裹数</th>
+            <th>发送的总包裹数</th>
+            <th>接收到的总字节数</th>
+            <th>发送的总字节数</th>
+            <th>接收到的错误包数</th>
+            <th>发送数据包时的错误数</th>
+            <th>接收时丢弃的包数</th>
+            <th>发送时丢弃的包数</th>
+        </tr>
+        <tbody id="network-info"></tbody>
+    </table>
+</div>
+<h5>以太网络信息</h5>
+<div>
+    <table>
+        <tr>
+            <th>name</th>
+            <th>address</th>
+            <th>broadcast</th>
+            <th>hwaddr</th>
+            <th>netmask</th>
+            <th>description</th>
+            <th>type</th>
+        </tr>
+        <tbody id="ethernet-info"></tbody>
+    </table>
+</div>
+</body>
+<script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        getCpuInfo();
+        getMemoryInfo();
+        getSystemInfo();
+        getSystemInfoByJava();
+        getUserInfo();
+        getFileSystemInfo();
+        getNetworkInfo();
+        getEthernetInfo();
+    });
+
+    var time_interval = 1000 * 2;
+
+    function getCpuInfo(){
+        setInterval(function () {
+            $.post(
+                "/getCpuInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#cpu-info").html("");
+                        for (var i = 0; i < result.array.length; i++) {
+                            $("#cpu-info").html($("#cpu-info").html() +
+                                "<tr>" +
+                                "<td>" + result.array[i].Vendor + "</td>" +
+                                "<td>" + result.array[i].Model + "</td>" +
+                                "<td>" + result.array[i].Mhz + "</td>" +
+                                "<td>" + result.array[i].CacheSize + "</td>" +
+                                "<td>" + result.array[i].User + "</td>" +
+                                "<td>" + result.array[i].Sys + "</td>" +
+                                "<td>" + result.array[i].Wait + "</td>" +
+                                "<td>" + result.array[i].Nice + "</td>" +
+                                "<td>" + result.array[i].Idle + "</td>" +
+                                "<td>" + result.array[i].Combined + "</td>" +
+                                "</tr>"
+                            )
+                        }
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+
+    function getMemoryInfo(){
+        setInterval(function () {
+            $.post(
+                "/getMemoryInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#memory-info").html("" +
+                            "<tr>" +
+                            "<td>" + result.Total + "</td>" +
+                            "<td>" + result.User + "</td>" +
+                            "<td>" + result.Free + "</td>" +
+                            "<td>" + result.SwapTotal + "</td>" +
+                            "<td>" + result.SwapUsed + "</td>" +
+                            "<td>" + result.SwapFree + "</td>" +
+                            "</tr>"
+                        )
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+
+    function getSystemInfo(){
+        $.post(
+            "/getSystemInfo",
+            {
+                //parameters
+            },
+            function (result, status) {
+                if (result.code == '0') {
+                    $("#system-info").html("" +
+                        "<li>Arch&nbsp;&nbsp;&nbsp;" + result.Arch + "</li>" +
+                        "<li>CpuEndian&nbsp;&nbsp;&nbsp;" + result.CpuEndian + "</li>" +
+                        "<li>DataModel&nbsp;&nbsp;&nbsp;" + result.DataModel + "</li>" +
+                        "<li>Description&nbsp;&nbsp;&nbsp;" + result.Description + "</li>" +
+                        "<li>Name&nbsp;&nbsp;&nbsp;" + result.Name + "</li>" +
+                        "<li>PatchLevel&nbsp;&nbsp;&nbsp;" + result.PatchLevel + "</li>" +
+                        "<li>Vendor&nbsp;&nbsp;&nbsp;" + result.Vendor + "</li>" +
+                        "<li>VendorCodeName&nbsp;&nbsp;&nbsp;" + result.VendorCodeName + "</li>" +
+                        "<li>VendorName&nbsp;&nbsp;&nbsp;" + result.VendorName + "</li>" +
+                        "<li>VendorVersion&nbsp;&nbsp;&nbsp;" + result.VendorVersion + "</li>" +
+                        "<li>Version&nbsp;&nbsp;&nbsp;" + result.Version + "</li>" +
+                        ""
+                    )
+                } else {
+                    $("#cpu").html(result.msg);
+                }
+            }
+        );
+    }
+
+    function getSystemInfoByJava(){
+        $.post(
+            "/getSystemInfoFromJava",
+            {
+                //parameters
+            },
+            function (result, status) {
+                if (result.code == '0') {
+                    $("#system-info-java").html("" +
+                        "<li>userName&nbsp;&nbsp;&nbsp;" + result.userName + "</li>" +
+                        "<li>computerName&nbsp;&nbsp;&nbsp;" + result.computerName + "</li>" +
+                        "<li>userDomain&nbsp;&nbsp;&nbsp;" + result.userDomain + "</li>" +
+                        "<li>ip&nbsp;&nbsp;&nbsp;" + result.ip + "</li>" +
+                        "<li>hostName&nbsp;&nbsp;&nbsp;" + result.hostName + "</li>" +
+                        "<li>totalMemory&nbsp;&nbsp;&nbsp;" + result.totalMemory + "</li>" +
+                        "<li>freeMemory&nbsp;&nbsp;&nbsp;" + result.freeMemory + "</li>" +
+                        "<li>availableProcessors&nbsp;&nbsp;&nbsp;" + result.availableProcessors + "</li>" +
+                        "<li>javaVersion&nbsp;&nbsp;&nbsp;" + result.javaVersion + "</li>" +
+                        "<li>javaVendor&nbsp;&nbsp;&nbsp;" + result.javaVendor + "</li>" +
+                        "<li>javaVendorUrl&nbsp;&nbsp;&nbsp;" + result.javaVendorUrl + "</li>" +
+                        "<li>javaHome&nbsp;&nbsp;&nbsp;" + result.javaHome + "</li>" +
+                        "<li>javaVmSpecificationVersion&nbsp;&nbsp;&nbsp;" + result.javaVmSpecificationVersion + "</li>" +
+                        "<li>javaVmSpecificationVendor&nbsp;&nbsp;&nbsp;" + result.javaVmSpecificationVendor + "</li>" +
+                        "<li>javaVmSpecificationName&nbsp;&nbsp;&nbsp;" + result.javaVmSpecificationName + "</li>" +
+                        "<li>javaVmVersion&nbsp;&nbsp;&nbsp;" + result.javaVmVersion + "</li>" +
+                        "<li>javaVmVendor&nbsp;&nbsp;&nbsp;" + result.javaVmVendor + "</li>" +
+                        "<li>javaVmName&nbsp;&nbsp;&nbsp;" + result.javaVmName + "</li>" +
+                        "<li>javaSpecificationVersion&nbsp;&nbsp;&nbsp;" + result.javaSpecificationVersion + "</li>" +
+                        "<li>javaSpecificationVendor&nbsp;&nbsp;&nbsp;" + result.javaSpecificationVendor + "</li>" +
+                        "<li>javaSpecificationName&nbsp;&nbsp;&nbsp;" + result.javaSpecificationName + "</li>" +
+                        "<li>javaClassVersion&nbsp;&nbsp;&nbsp;" + result.javaClassVersion + "</li>" +
+                        "<li>javaClassPath&nbsp;&nbsp;&nbsp;" + result.javaClassPath + "</li>" +
+                        "<li>javaLibraryPath&nbsp;&nbsp;&nbsp;" + result.javaLibraryPath + "</li>" +
+                        "<li>javaIoTmpdir&nbsp;&nbsp;&nbsp;" + result.javaIoTmpdir + "</li>" +
+                        "<li>javaExtDirs&nbsp;&nbsp;&nbsp;" + result.javaExtDirs + "</li>" +
+                        "<li>osName&nbsp;&nbsp;&nbsp;" + result.osName + "</li>" +
+                        "<li>osArch&nbsp;&nbsp;&nbsp;" + result.osArch + "</li>" +
+                        "<li>osVersion&nbsp;&nbsp;&nbsp;" + result.osVersion + "</li>" +
+                        "<li>fileSeparator&nbsp;&nbsp;&nbsp;" + result.fileSeparator + "</li>" +
+                        "<li>pathSeparator&nbsp;&nbsp;&nbsp;" + result.pathSeparator + "</li>" +
+                        "<li>lineSeparator&nbsp;&nbsp;&nbsp;" + result.lineSeparator + "</li>" +
+                        "<li>userAccountName&nbsp;&nbsp;&nbsp;" + result.userAccountName + "</li>" +
+                        "<li>userHome&nbsp;&nbsp;&nbsp;" + result.userHome + "</li>" +
+                        "<li>userDir&nbsp;&nbsp;&nbsp;" + result.userDir + "</li>" +
+                        ""
+                    );
+                } else {
+                    $("#cpu").html(result.msg);
+                }
+            }
+        );
+    }
+
+    function getUserInfo(){
+        setInterval(function () {
+            $.post(
+                "/getUserInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#user-info").html("");
+                        for (var i = 0; i < result.array.length; i++) {
+                            $("#user-info").html($("#user-info").html() +
+                                "<tr>" +
+                                "<td>" + result.array[i].User + "</td>" +
+                                "<td>" + result.array[i].Host + "</td>" +
+                                "<td>" + result.array[i].Device + "</td>" +
+                                "<td>" + result.array[i].Time + "</td>" +
+                                "</tr>"
+                            )
+                        }
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+
+    function getFileSystemInfo(){
+        setInterval(function () {
+            $.post(
+                "/getFileSystemInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#file-system-info").html("");
+                        for (var i = 0; i < result.array.length; i++) {
+                            $("#file-system-info").html($("#file-system-info").html() +
+                                "<tr>" +
+                                "<td>" + result.array[i].DevName + "</td>" +
+                                "<td>" + result.array[i].DirName + "</td>" +
+                                "<td>" + result.array[i].Flags + "</td>" +
+                                "<td>" + result.array[i].SysTypeName + "</td>" +
+                                "<td>" + result.array[i].TypeName + "</td>" +
+                                "<td>" + result.array[i].Type + "</td>" +
+                                "<td>" + result.array[i].Total + "</td>" +
+                                "<td>" + result.array[i].Free + "</td>" +
+                                "<td>" + result.array[i].Avail + "</td>" +
+                                "<td>" + result.array[i].Used + "</td>" +
+                                "<td>" + result.array[i].Percent + "</td>" +
+                                "<td>" + result.array[i].DiskReads + "</td>" +
+                                "<td>" + result.array[i].DiskWrites + "</td>" +
+                                "</tr>"
+                            )
+                        }
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+
+    function getNetworkInfo(){
+        setInterval(function () {
+            $.post(
+                "/getNetworkInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#network-info").html("");
+                        for (var i = 0; i < result.array.length; i++) {
+                            $("#network-info").html($("#network-info").html() +
+                                "<tr>" +
+                                "<td>" + result.array[i].name + "</td>" +
+                                "<td>" + result.array[i].address + "</td>" +
+                                "<td>" + result.array[i].netmask + "</td>" +
+                                "<td>" + result.array[i].rxPackets + "</td>" +
+                                "<td>" + result.array[i].txPackets + "</td>" +
+                                "<td>" + result.array[i].rxBytes + "</td>" +
+                                "<td>" + result.array[i].txBytes + "</td>" +
+                                "<td>" + result.array[i].rxErrors + "</td>" +
+                                "<td>" + result.array[i].txErrors + "</td>" +
+                                "<td>" + result.array[i].rxDropped + "</td>" +
+                                "<td>" + result.array[i].txDropped + "</td>" +
+                                "</tr>"
+                            )
+                        }
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+
+    function getEthernetInfo(){
+        setInterval(function () {
+            $.post(
+                "/getEthernetInfo",
+                {
+                    //parameters
+                },
+                function (result, status) {
+                    if (result.code == '0') {
+                        $("#ethernet-info").html("");
+                        for (var i = 0; i < result.array.length; i++) {
+                            $("#ethernet-info").html($("#ethernet-info").html() +
+                                "<tr>" +
+                                "<td>" + result.array[i].name + "</td>" +
+                                "<td>" + result.array[i].address + "</td>" +
+                                "<td>" + result.array[i].broadcast + "</td>" +
+                                "<td>" + result.array[i].hwaddr + "</td>" +
+                                "<td>" + result.array[i].netmask + "</td>" +
+                                "<td>" + result.array[i].description + "</td>" +
+                                "<td>" + result.array[i].type + "</td>" +
+                                "</tr>"
+                            )
+                        }
+                    } else {
+                        $("#cpu").html(result.msg);
+                    }
+                }
+            );
+        }, time_interval);
+    }
+</script>
+</html>
