@@ -22,19 +22,22 @@ public class FileSystemCollector {
         FileSystem[] fileSystems = sigar.getFileSystemList();
 
         for (FileSystem fs : fileSystems) {
+            if (fs.getType() != 2) {
+                continue;
+            }
             JSONObject jsonObject = new JSONObject();
             // 分区的盘符名称
-            jsonObject.put("DevName" , fs.getDevName());
+            jsonObject.put("devName" , fs.getDevName());
             // 分区的盘符名称
-            jsonObject.put("DirName" , fs.getDirName());
+            jsonObject.put("dirName" , fs.getDirName());
 
-            jsonObject.put("Flags" , fs.getFlags());
+            jsonObject.put("flags" , fs.getFlags());
             // 文件系统类型，比如 FAT32、NTFS
-            jsonObject.put("SysTypeName" , fs.getSysTypeName());
+            jsonObject.put("sysTypeName" , fs.getSysTypeName());
             // 文件系统类型名，比如本地硬盘、光驱、网络文件系统等
-            jsonObject.put("TypeName" , fs.getTypeName());
+            jsonObject.put("typeName" , fs.getTypeName());
             // 文件系统类型
-            jsonObject.put("Type" , fs.getType());
+            jsonObject.put("type" , fs.getType());
 
             FileSystemUsage usage = sigar.getFileSystemUsage(fs.getDirName());
 
@@ -45,16 +48,16 @@ public class FileSystemCollector {
                     break;
                 case 2: // TYPE_LOCAL_DISK : 本地硬盘
                     // 文件系统总大小
-                    jsonObject.put("Total" , usage.getTotal()/1024 + "MB");
+                    jsonObject.put("total" , usage.getTotal()/1024 + "MB");
                     // 文件系统剩余大小
-                    jsonObject.put("Free" , usage.getFree()/1024 + "MB");
+                    jsonObject.put("free" , usage.getFree()/1024 + "MB");
                     // 文件系统可用大小
-                    jsonObject.put("Avail" , usage.getAvail()/1024 + "MB");
+                    jsonObject.put("avail" , usage.getAvail()/1024 + "MB");
                     // 文件系统已经使用量
-                    jsonObject.put("Used" , usage.getUsed()/1024 + "MB");
+                    jsonObject.put("used" , usage.getUsed()/1024 + "MB");
                     double usePercent = usage.getUsePercent() * 100D;
                     // 文件系统资源的利用率
-                    jsonObject.put("Percent" , usePercent + "%");
+                    jsonObject.put("percent" , usePercent + "%");
                     break;
                 case 3:// TYPE_NETWORK ：网络
                     break;
@@ -66,9 +69,9 @@ public class FileSystemCollector {
                     break;
             }
 
-            jsonObject.put("DiskReads" , usage.getDiskReads());
+            jsonObject.put("diskReads" , usage.getDiskReads());
 
-            jsonObject.put("DiskWrites" , usage.getDiskWrites());
+            jsonObject.put("diskWrites" , usage.getDiskWrites());
 
             result.add(jsonObject);
         }

@@ -2,8 +2,6 @@
 <html lang="en" xmlns:th="http://www.springframework.org/schema/beans">
 <head>
     <meta charset="UTF-8">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Title</title>
     <style type="text/css">
         td{
@@ -124,12 +122,6 @@
 <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
 <script type="text/javascript">
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function(e, xhr, options) {
-        xhr.setRequestHeader(header, token);
-    });
-
     $(document).ready(function(){
         getCpuInfo();
         getMemoryInfo();
@@ -146,7 +138,7 @@
     function getCpuInfo(){
         setInterval(function () {
             $.post(
-                "/getCpuInfo",
+                "/information/getCpuInfo",
                 {
                     //parameters
                 },
@@ -156,16 +148,16 @@
                         for (var i = 0; i < result.array.length; i++) {
                             $("#cpu-info").html($("#cpu-info").html() +
                                 "<tr>" +
-                                "<td>" + result.array[i].Vendor + "</td>" +
-                                "<td>" + result.array[i].Model + "</td>" +
-                                "<td>" + result.array[i].Mhz + "</td>" +
-                                "<td>" + result.array[i].CacheSize + "</td>" +
-                                "<td>" + result.array[i].User + "</td>" +
-                                "<td>" + result.array[i].Sys + "</td>" +
-                                "<td>" + result.array[i].Wait + "</td>" +
-                                "<td>" + result.array[i].Nice + "</td>" +
-                                "<td>" + result.array[i].Idle + "</td>" +
-                                "<td>" + result.array[i].Combined + "</td>" +
+                                "<td>" + result.array[i].vendor + "</td>" +
+                                "<td>" + result.array[i].model + "</td>" +
+                                "<td>" + result.array[i].mhz + "</td>" +
+                                "<td>" + result.array[i].cacheSize + "</td>" +
+                                "<td>" + result.array[i].user + "</td>" +
+                                "<td>" + result.array[i].sys + "</td>" +
+                                "<td>" + result.array[i].wait + "</td>" +
+                                "<td>" + result.array[i].nice + "</td>" +
+                                "<td>" + result.array[i].idle + "</td>" +
+                                "<td>" + result.array[i].combined + "</td>" +
                                 "</tr>"
                             )
                         }
@@ -180,7 +172,7 @@
     function getMemoryInfo(){
         setInterval(function () {
             $.post(
-                "/getMemoryInfo",
+                "/information/getMemoryInfo",
                 {
                     //parameters
                 },
@@ -188,12 +180,12 @@
                     if (result.code == '0') {
                         $("#memory-info").html("" +
                             "<tr>" +
-                            "<td>" + result.Total + "</td>" +
-                            "<td>" + result.User + "</td>" +
-                            "<td>" + result.Free + "</td>" +
-                            "<td>" + result.SwapTotal + "</td>" +
-                            "<td>" + result.SwapUsed + "</td>" +
-                            "<td>" + result.SwapFree + "</td>" +
+                            "<td>" + result.total + "</td>" +
+                            "<td>" + result.user + "</td>" +
+                            "<td>" + result.free + "</td>" +
+                            "<td>" + result.swapTotal + "</td>" +
+                            "<td>" + result.swapUsed + "</td>" +
+                            "<td>" + result.swapFree + "</td>" +
                             "</tr>"
                         )
                     } else {
@@ -206,24 +198,24 @@
 
     function getSystemInfo(){
         $.post(
-            "/getSystemInfo",
+            "/information/getSystemInfo",
             {
                 //parameters
             },
             function (result, status) {
                 if (result.code == '0') {
                     $("#system-info").html("" +
-                        "<li>Arch&nbsp;&nbsp;&nbsp;" + result.Arch + "</li>" +
-                        "<li>CpuEndian&nbsp;&nbsp;&nbsp;" + result.CpuEndian + "</li>" +
-                        "<li>DataModel&nbsp;&nbsp;&nbsp;" + result.DataModel + "</li>" +
-                        "<li>Description&nbsp;&nbsp;&nbsp;" + result.Description + "</li>" +
-                        "<li>Name&nbsp;&nbsp;&nbsp;" + result.Name + "</li>" +
-                        "<li>PatchLevel&nbsp;&nbsp;&nbsp;" + result.PatchLevel + "</li>" +
-                        "<li>Vendor&nbsp;&nbsp;&nbsp;" + result.Vendor + "</li>" +
-                        "<li>VendorCodeName&nbsp;&nbsp;&nbsp;" + result.VendorCodeName + "</li>" +
-                        "<li>VendorName&nbsp;&nbsp;&nbsp;" + result.VendorName + "</li>" +
-                        "<li>VendorVersion&nbsp;&nbsp;&nbsp;" + result.VendorVersion + "</li>" +
-                        "<li>Version&nbsp;&nbsp;&nbsp;" + result.Version + "</li>" +
+                        "<li>Arch&nbsp;&nbsp;&nbsp;" + result.arch + "</li>" +
+                        "<li>CpuEndian&nbsp;&nbsp;&nbsp;" + result.cpuEndian + "</li>" +
+                        "<li>DataModel&nbsp;&nbsp;&nbsp;" + result.dataModel + "</li>" +
+                        "<li>Description&nbsp;&nbsp;&nbsp;" + result.description + "</li>" +
+                        "<li>Name&nbsp;&nbsp;&nbsp;" + result.name + "</li>" +
+                        "<li>PatchLevel&nbsp;&nbsp;&nbsp;" + result.patchLevel + "</li>" +
+                        "<li>Vendor&nbsp;&nbsp;&nbsp;" + result.vendor + "</li>" +
+                        "<li>VendorCodeName&nbsp;&nbsp;&nbsp;" + result.vendorCodeName + "</li>" +
+                        "<li>VendorName&nbsp;&nbsp;&nbsp;" + result.vendorName + "</li>" +
+                        "<li>VendorVersion&nbsp;&nbsp;&nbsp;" + result.vendorVersion + "</li>" +
+                        "<li>Version&nbsp;&nbsp;&nbsp;" + result.version + "</li>" +
                         ""
                     )
                 } else {
@@ -235,7 +227,7 @@
 
     function getSystemInfoByJava(){
         $.post(
-            "/getSystemInfoFromJava",
+            "/information/getSystemInfoFromJava",
             {
                 //parameters
             },
@@ -289,7 +281,7 @@
     function getUserInfo(){
         setInterval(function () {
             $.post(
-                "/getUserInfo",
+                "/information/getUserInfo",
                 {
                     //parameters
                 },
@@ -299,10 +291,10 @@
                         for (var i = 0; i < result.array.length; i++) {
                             $("#user-info").html($("#user-info").html() +
                                 "<tr>" +
-                                "<td>" + result.array[i].User + "</td>" +
-                                "<td>" + result.array[i].Host + "</td>" +
-                                "<td>" + result.array[i].Device + "</td>" +
-                                "<td>" + result.array[i].Time + "</td>" +
+                                "<td>" + result.array[i].user + "</td>" +
+                                "<td>" + result.array[i].host + "</td>" +
+                                "<td>" + result.array[i].device + "</td>" +
+                                "<td>" + result.array[i].time + "</td>" +
                                 "</tr>"
                             )
                         }
@@ -317,7 +309,7 @@
     function getFileSystemInfo(){
         setInterval(function () {
             $.post(
-                "/getFileSystemInfo",
+                "/information/getFileSystemInfo",
                 {
                     //parameters
                 },
@@ -327,19 +319,19 @@
                         for (var i = 0; i < result.array.length; i++) {
                             $("#file-system-info").html($("#file-system-info").html() +
                                 "<tr>" +
-                                "<td>" + result.array[i].DevName + "</td>" +
-                                "<td>" + result.array[i].DirName + "</td>" +
-                                "<td>" + result.array[i].Flags + "</td>" +
-                                "<td>" + result.array[i].SysTypeName + "</td>" +
-                                "<td>" + result.array[i].TypeName + "</td>" +
-                                "<td>" + result.array[i].Type + "</td>" +
-                                "<td>" + result.array[i].Total + "</td>" +
-                                "<td>" + result.array[i].Free + "</td>" +
-                                "<td>" + result.array[i].Avail + "</td>" +
-                                "<td>" + result.array[i].Used + "</td>" +
-                                "<td>" + result.array[i].Percent + "</td>" +
-                                "<td>" + result.array[i].DiskReads + "</td>" +
-                                "<td>" + result.array[i].DiskWrites + "</td>" +
+                                "<td>" + result.array[i].devName + "</td>" +
+                                "<td>" + result.array[i].dirName + "</td>" +
+                                "<td>" + result.array[i].flags + "</td>" +
+                                "<td>" + result.array[i].sysTypeName + "</td>" +
+                                "<td>" + result.array[i].typeName + "</td>" +
+                                "<td>" + result.array[i].type + "</td>" +
+                                "<td>" + result.array[i].total + "</td>" +
+                                "<td>" + result.array[i].free + "</td>" +
+                                "<td>" + result.array[i].avail + "</td>" +
+                                "<td>" + result.array[i].used + "</td>" +
+                                "<td>" + result.array[i].percent + "</td>" +
+                                "<td>" + result.array[i].diskReads + "</td>" +
+                                "<td>" + result.array[i].diskWrites + "</td>" +
                                 "</tr>"
                             )
                         }
@@ -354,7 +346,7 @@
     function getNetworkInfo(){
         setInterval(function () {
             $.post(
-                "/getNetworkInfo",
+                "/information/getNetworkInfo",
                 {
                     //parameters
                 },
@@ -389,7 +381,7 @@
     function getEthernetInfo(){
         setInterval(function () {
             $.post(
-                "/getEthernetInfo",
+                "/information/getEthernetInfo",
                 {
                     //parameters
                 },

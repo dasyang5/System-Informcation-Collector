@@ -26,6 +26,9 @@ public class EthernetCollector {
                     || NetFlags.NULL_HWADDR.equals(cfg.getHwaddr())) {
                 continue;
             }
+            if (cfg.getAddress().equals("0.0.0.0")) {
+                continue;
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name" , cfg.getName());//
             jsonObject.put("address" , cfg.getAddress());// IP地址

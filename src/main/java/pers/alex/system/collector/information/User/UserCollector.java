@@ -20,10 +20,10 @@ public class UserCollector {
         Who[] whoList = sigar.getWhoList();
         for (Who o : whoList) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("User", o.getUser());
-            jsonObject.put("Host", o.getHost());
-            jsonObject.put("Device", o.getDevice());
-            jsonObject.put("Time", o.getTime());
+            jsonObject.put("user", o.getUser());
+            jsonObject.put("host", o.getHost());
+            jsonObject.put("device", o.getDevice());
+            jsonObject.put("time", o.getTime());
             result.add(jsonObject);
         }
 

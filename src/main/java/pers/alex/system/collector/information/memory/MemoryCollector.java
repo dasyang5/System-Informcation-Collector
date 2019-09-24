@@ -24,18 +24,18 @@ public class MemoryCollector {
         Swap swap = sigar.getSwap();
 
         // 内存总量
-        result.put("Total" , mem.getTotal() / (1024L*1024L) + "MB");
+        result.put("total" , mem.getTotal() / (1024L*1024L));
         // 当前内存使用量
-        result.put("User" , mem.getUsed() / (1024L*1024L) + "MB");
+        result.put("user" , mem.getUsed() / (1024L*1024L));
         // 当前内存剩余量
-        result.put("Free" , mem.getFree() / (1024L*1024L) + "MB");
+        result.put("free" , mem.getFree() / (1024L*1024L));
 
         // 交换区总量
-        result.put("SwapTotal" ,swap.getTotal() / (1024L*1024L) + "MB");
+        result.put("swapTotal" ,swap.getTotal() / (1024L*1024L));
         // 当前交换区使用量
-        result.put("SwapUsed" ,swap.getUsed() / (1024L*1024L) + "MB");
+        result.put("swapUsed" ,swap.getUsed() / (1024L*1024L));
         // 当前交换区剩余量
-        result.put("SwapFree" ,swap.getFree() / (1024L*1024L) + "MB");
+        result.put("swapFree" ,swap.getFree() / (1024L*1024L));
 
         return result;
     }

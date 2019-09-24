@@ -22,10 +22,13 @@ public class NetCollector {
         String ifNames[] = sigar.getNetInterfaceList();
         for (int i = 0; i < ifNames.length; i++) {
 
-            JSONObject jsonObject = new JSONObject();
 
             String name = ifNames[i];
             NetInterfaceConfig ifconfig = sigar.getNetInterfaceConfig(name);
+            if (ifconfig.getAddress().equals("0.0.0.0")) {
+                continue;
+            }
+            JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", name);// 网络设备名
             jsonObject.put("address", ifconfig.getAddress());// IP地址
             jsonObject.put("netmask", ifconfig.getNetmask());// 子网掩码

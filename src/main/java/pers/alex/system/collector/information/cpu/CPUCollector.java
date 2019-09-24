@@ -25,16 +25,16 @@ public class CPUCollector {
 
         for (int i = 0; i < cpuInfos.length; i++) {
             JSONObject cpu = new JSONObject();
-            cpu.put("Mhz", cpuInfos[i].getMhz());// CPU的总量MHz
-            cpu.put("Vendor", cpuInfos[i].getVendor());// 获得CPU的卖主，如：Intel
-            cpu.put("Model", cpuInfos[i].getModel());// 获得CPU的类别，如：Celeron
-            cpu.put("CacheSize", cpuInfos[i].getCacheSize());// 缓冲存储器数量
-            cpu.put("User" , CpuPerc.format(cpuPercs[i].getUser()));// 用户使用率
-            cpu.put("Sys" , CpuPerc.format(cpuPercs[i].getSys()));// 系统使用率
-            cpu.put("Wait" , CpuPerc.format(cpuPercs[i].getWait()));// 当前等待率
-            cpu.put("Nice" , CpuPerc.format(cpuPercs[i].getNice()));//当前错误率
-            cpu.put("Idle" , CpuPerc.format(cpuPercs[i].getIdle()));// 当前空闲率
-            cpu.put("Combined" , CpuPerc.format(cpuPercs[i].getCombined()));// 总的使用率
+            cpu.put("mhz", cpuInfos[i].getMhz());// CPU的总量MHz
+            cpu.put("vendor", cpuInfos[i].getVendor());// 获得CPU的卖主，如：Intel
+            cpu.put("model", cpuInfos[i].getModel());// 获得CPU的类别，如：Celeron
+            cpu.put("cacheSize", cpuInfos[i].getCacheSize());// 缓冲存储器数量
+            cpu.put("user" , CpuPerc.format(cpuPercs[i].getUser()));// 用户使用率
+            cpu.put("sys" , CpuPerc.format(cpuPercs[i].getSys()));// 系统使用率
+            cpu.put("wait" , CpuPerc.format(cpuPercs[i].getWait()));// 当前等待率
+            cpu.put("nice" , CpuPerc.format(cpuPercs[i].getNice()));//当前错误率
+            cpu.put("idle" , CpuPerc.format(cpuPercs[i].getIdle()));// 当前空闲率
+            cpu.put("combined" , CpuPerc.format(cpuPercs[i].getCombined()));// 总的使用率
             jsonArray.add(cpu);
         }
 

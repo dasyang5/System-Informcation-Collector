@@ -16,24 +16,24 @@ public class SystemCollector {
         // 取当前操作系统的信息
         OperatingSystem OS = OperatingSystem.getInstance();
         // 操作系统内核类型如： 386、486、586等x86
-        result.put("Arch" , OS.getArch());//操作系统
-        result.put("CpuEndian" , OS.getCpuEndian());//操作系统CpuEndian
-        result.put("DataModel" , OS.getDataModel());//操作系统DataModel
+        result.put("arch" , OS.getArch());//操作系统
+        result.put("cpuEndian" , OS.getCpuEndian());//操作系统CpuEndian
+        result.put("dataModel" , OS.getDataModel());//操作系统DataModel
         // 系统描述
-        result.put("Description" , OS.getDescription());//操作系统的描述
+        result.put("description" , OS.getDescription());//操作系统的描述
         // 操作系统类型
-        result.put("Name" , OS.getName());
-        result.put("PatchLevel" , OS.getPatchLevel());
+        result.put("name" , OS.getName());
+        result.put("patchLevel" , OS.getPatchLevel());
         // 操作系统的卖主
-        result.put("Vendor" , OS.getVendor());//操作系统的卖主
+        result.put("vendor" , OS.getVendor());//操作系统的卖主
         // 卖主名称
-        result.put("VendorCodeName" , OS.getVendorCodeName());//操作系统的卖主名
+        result.put("vendorCodeName" , OS.getVendorCodeName());//操作系统的卖主名
         // 操作系统名称
-        result.put("VendorName" , OS.getVendorName());//操作系统名称
+        result.put("vendorName" , OS.getVendorName());//操作系统名称
         // 操作系统卖主类型
-        result.put("VendorVersion" , OS.getVendorVersion());//操作系统卖主类型
+        result.put("vendorVersion" , OS.getVendorVersion());//操作系统卖主类型
         // 操作系统的版本号
-        result.put("Version" , OS.getVersion());//操作系统的版本号
+        result.put("version" , OS.getVersion());//操作系统的版本号
 
         return result;
 
