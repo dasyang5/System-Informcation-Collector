@@ -2,6 +2,8 @@ package pers.alex.system.collector.bean;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.File;
+
 /**
  * 进程信息存储类
  * @author Alex
@@ -196,6 +198,15 @@ public class Process implements Comparable<Process>{
         jsonObject.put("status", this.getStatus());
         jsonObject.put("time", this.getTime());
         jsonObject.put("description", this.getDescription());
+        if (this.getDescription().contains("/")) {
+            jsonObject.put("name", this.getDescription().substring(this.getDescription().lastIndexOf("/") + 1));
+        } else if (this.getDescription().contains("\\")) {
+            jsonObject.put("name", this.getDescription().substring(this.getDescription().lastIndexOf("\\") + 1));
+        } else if (this.getDescription().contains(".")) {
+            jsonObject.put("name", this.getDescription().substring(this.getDescription().lastIndexOf(".") + 1));
+        }  else {
+            jsonObject.put("name", this.getDescription());
+        }
         return jsonObject;
     }
 

@@ -47,17 +47,17 @@ public class FileSystemCollector {
                 case 1: // TYPE_NONE
                     break;
                 case 2: // TYPE_LOCAL_DISK : 本地硬盘
-                    // 文件系统总大小
-                    jsonObject.put("total" , usage.getTotal()/1024 + "MB");
-                    // 文件系统剩余大小
-                    jsonObject.put("free" , usage.getFree()/1024 + "MB");
-                    // 文件系统可用大小
-                    jsonObject.put("avail" , usage.getAvail()/1024 + "MB");
-                    // 文件系统已经使用量
-                    jsonObject.put("used" , usage.getUsed()/1024 + "MB");
+                    // 文件系统总大小 MB
+                    jsonObject.put("total" , usage.getTotal()/1024);
+                    // 文件系统剩余大小 MB
+                    jsonObject.put("free" , usage.getFree()/1024);
+                    // 文件系统可用大小 MB
+                    jsonObject.put("avail" , usage.getAvail()/1024);
+                    // 文件系统已经使用量 MB
+                    jsonObject.put("used" , usage.getUsed()/1024);
                     double usePercent = usage.getUsePercent() * 100D;
-                    // 文件系统资源的利用率
-                    jsonObject.put("percent" , usePercent + "%");
+                    // 文件系统资源的利用率 MB 利用率
+                    jsonObject.put("percent" , usePercent);
                     break;
                 case 3:// TYPE_NETWORK ：网络
                     break;

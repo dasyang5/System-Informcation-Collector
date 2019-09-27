@@ -235,6 +235,85 @@ public class HomeController {
         return result;
     }
 
+    @RequestMapping("/getDynamicData")
+    @ResponseBody
+    public JSONObject getDynamicData(){
+
+        JSONObject result = new JSONObject();
+
+        try {
+
+            //硬盘信息
+            JSONArray fileSystemArray = FileSystemCollector.collect();
+            JSONArray fileSystemResult = new JSONArray();
+            Long fileSystemRead = 0L;
+            Long fileSystemWrite = 0L;
+            double fileSystemAvailableSpace = 0d;
+            double fileSystemTotalSpace = 0d;
+
+            for (Object obj : fileSystemArray) {
+                fileSystemRead += ((JSONObject) obj).getLong("diskReads");
+                fileSystemWrite += ((JSONObject) obj).getLong("diskWrites");
+                fileSystemAvailableSpace += ((JSONObject) obj).getDouble("avail");
+                fileSystemTotalSpace += ((JSONObject) obj).getDouble("total");
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("devName", ((JSONObject) obj).getString("dirName"));
+                jsonObject.put("avail", ((JSONObject) obj).getString("avail"));
+                jsonObject.put("used", ((JSONObject) obj).getString("used"));
+                fileSystemResult.add(jsonObject);
+            }
+            result.put("fileSystemRead", fileSystemRead);//文件系统读
+            result.put("fileSystemWrite", fileSystemWrite);//文件系统写
+            result.put("fileSystemAvailableSpace", fileSystemAvailableSpace);//文件系统可用空间 mb
+            result.put("fileSystemUsePercent", ((fileSystemTotalSpace - fileSystemAvailableSpace) / fileSystemTotalSpace) + "%");//文件系统使用百分比
+            result.put("fileSystemDetail", fileSystemResult);
+
+            //任务列表
+            result.put("processes", ProcessCollector.collect());//任务TOP10
+
+            //jvm内存
+            JSONObject systemInformationFromJava = JVMSystemCollector.collect();
+            result.put("totalMemoryJVM", systemInformationFromJava.getString("totalMemory"));//jvm总内存   单位字节
+            result.put("freeMemoryJVM", systemInformationFromJava.getString("freeMemory"));//jvm可用内存   单位字节
+
+            //网络IO
+            JSONArray networkArray = NetCollector.collect();
+            Long sendBytes = 0L;
+            Long receiveBytes = 0L;
+            for (Object obj : networkArray) {
+                sendBytes += ((JSONObject) obj).getLong("txBytes");
+                receiveBytes += ((JSONObject) obj).getLong("rxBytes");
+            }
+            result.put("sendBytes", sendBytes);//接收总字节数
+            result.put("receiveBytes", receiveBytes);//发送总字节数
+
+            //CPU使用率
+            JSONArray cpuArray = CPUCollector.collect();
+            double cpuUsedPercent = 0d;
+            for (Object obj : cpuArray) {
+                String percent = ((JSONObject) obj).getString("combined");
+                cpuUsedPercent += Double.parseDouble(percent.substring(0, percent.length() - 1));
+            }
+            result.put("cpuCombinedPercent", cpuUsedPercent / cpuArray.size() + "%");
+
+            //内存
+            JSONObject memoryJSONObject = MemoryCollector.collect();
+            result.put("memoryTotal", memoryJSONObject.getString("total"));
+            result.put("memoryUsed", memoryJSONObject.getString("user"));
+            result.put("memoryFree", memoryJSONObject.getString("free"));
+
+            result.put("code", 0);
+
+        } catch (Exception e) {
+            result = new JSONObject();
+            result.put("code", 1);
+            result.put("msg", e.getMessage());
+        }
+
+        return result;
+    }
+
 
     private String getBeforeDaysDateString(int days) {
         return LocalDate.now().plusDays(-days).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
